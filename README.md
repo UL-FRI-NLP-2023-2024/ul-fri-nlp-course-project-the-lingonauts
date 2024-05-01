@@ -2,7 +2,7 @@
 
 Repository containing all three submissions for course Natural Language Processing.
 
-## HPC setup
+## HPC first time setup
 
 Clone the repository via SSH to the HPC home directory. (You can use VSCode or manually)
 
@@ -41,4 +41,28 @@ exit
 ```shell
 salloc --partition=gpu --mem=64G -G 1 -c 16
 srun python report/code/example.py
+```
+
+## Running batch jobs on HPC
+1. Make sure you did steps 1. to 6. in the **HPC first time setup**.  
+
+2. Open _report/code/run_python.sh_ in an editor like nano/vim.    
+```shell
+nano report/code/run_python.sh
+```
+
+3. Review the SBATCH settings (job name and output file).
+
+4. Make sure run_python.sh is executable
+```shell
+[mb62860@hpc-login2 code]$ ls -la run_python.sh 
+-rwxr-xr-x 1 mb62860 mb62860 760 May  1 11:53 run_python.sh
+```
+```shell
+# If you don't see the x bytes set, do
+chmod +x
+```
+5. Run the script with the sbatch command. Provide the path to the python script right after run_python.sh
+```shell
+sbatch run_python.sh example.py
 ```
