@@ -45,16 +45,17 @@ def find_similar_questions(question, val_set, n=3):
 
 def few_shot_example_formatted_question(question, choices, choice_labels, answer_key):
     return (
-        f"{tokenizer.bos_token}[Example] Given the question '{question}' and the following choices: "
-        + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-        + f". [Answer]: {answer_key}. {tokenizer.eos_token}"
+        f"[Example question] Given the question '{question}' and the following choices: " #{tokenizer.bos_token}
+        + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices)) 
+        + ", which one is correct? Answer only with one of the following A, B, C, D or E.[End of example question]" #{tokenizer.eos_token}
+        + f". \n[Answer]{answer_key}[End of answer]" #{tokenizer.eos_token}
     )
 
 def normally_formatted_question(question, choices, choice_labels):
     return (
-        f"{tokenizer.bos_token}[Question] Given the question '{question}' and the following choices: "
+        f"[Main question] Given the question '{question}' and the following choices: "
         + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-        + ", which one is correct? Answer only with one of the following A, B, C, D or E. [Answer]:" #{tokenizer.eos_token}
+        + f", which one is correct? Answer only with one of the following A, B, C, D or E.[End of main question]" #{tokenizer.eos_token}
     )
 
 def few_shot_formatted_question(question, choices, choice_labels, val_set):
@@ -69,11 +70,11 @@ def few_shot_formatted_question(question, choices, choice_labels, val_set):
 
 
     prompt = (
-        f"{tokenizer.bos_token}"
-        + f"[Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. Your response can only include one character: A, B, C, D or E. [End of introduction]"
+        #f"{tokenizer.bos_token}" +
+        f"[Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. Your response can only include one character: A, B, C, D or E. [End of introduction]"
         + f"{examples}"
-        + f"\n\n[Main question] {main_question} [End of question]{tokenizer.eos_token}"
-        + "\nANSWER:"
+        + f"\n\n{main_question}" #{tokenizer.eos_token}
+        #+ "\nANSWER:"
     )
     return prompt
 
@@ -83,7 +84,7 @@ with open("output_cs2.txt", "w") as file:
     file.write("Test entry\n")  
     count = 0  
     for example in dataset:
-        if count < 1:
+        if count < 3:
             question = example['question']
             choices = example['choices']['text']
             choice_labels = example['choices']['label']
