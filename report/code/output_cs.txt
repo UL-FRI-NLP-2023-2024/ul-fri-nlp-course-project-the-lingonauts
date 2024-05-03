@@ -1,0 +1,38 @@
+Test entry
+Question ID: 90b30172e645ff91f7171a048582eb8b
+Question: The townhouse was a hard sell for the realtor, it was right next to a high rise what?
+Choices: A: suburban development, B: apartment building, C: bus stop, D: michigan, E: suburbs
+Correct Answer Key: 
+Generated Output: <s><s> [INST] Given the question 'The townhouse was a hard sell for the realtor, it was right next to a high rise what?' and the following choices: A: suburban development, B: apartment building, C: bus stop, D: michigan, E: suburbs, which one is correct? Answer only with one of the following A, B, C, D or E. [/INST]{tokenizer.eos_token} C: bus stop.
+
+Explanation:
+The context of the question suggests that the townhouse was hard to sell because of a specific entity located nearby. The choices provided include a suburban development, an apartment building, a bus stop, Michigan, and the suburbs. Based on the context, none of the first four options fit except for the bus stop, which could make the townhouse less desirable to some buyers if they prefer quieter neighborhoods or dislike the noise and congestion associated with bus stops. Michigan is not a nearby entity that could make a townhouse harder to sell, and the suburbs is a vague term that doesn't necessarily have a bearing on the situation described in the question.</s>
+
+Question ID: 000990552527b1353f98f1e1a7dfc643
+Question: There is a star at the center of what group of celestial bodies?
+Choices: A: hollywood, B: skyline, C: outer space, D: constellation, E: solar system
+Correct Answer Key: 
+Generated Output: <s><s> [INST] Given the question 'There is a star at the center of what group of celestial bodies?' and the following choices: A: hollywood, B: skyline, C: outer space, D: constellation, E: solar system, which one is correct? Answer only with one of the following A, B, C, D or E. [/INST]{tokenizer.eos_token} C: outer space
+
+Explanation: The star is a celestial body found in outer space. So, the correct answer is C: outer space.</s>
+
+Question ID: dca0f2859f3c3dd43a9b2bfeff4936a8
+Question: What were the kids doing as they looked up at the sky and clouds?
+Choices: A: ponder, B: become adults, C: wonder about, D: open door, E: distracting
+Correct Answer Key: 
+Generated Output: <s><s> [INST] Given the question 'What were the kids doing as they looked up at the sky and clouds?' and the following choices: A: ponder, B: become adults, C: wonder about, D: open door, E: distracting, which one is correct? Answer only with one of the following A, B, C, D or E. [/INST]{tokenizer.eos_token} C: wonder about.
+
+The children were likely looking up at the sky and clouds with curiosity and wondering about them. None of the other options make sense in this context.</s>
+
+Question ID: 8795a949b39702af0e452c9e1229046d
+Question: The person taught an advanced class only for who?
+Choices: A: own house, B: own self, C: wonderful memories, D: know truth, E: intelligent children
+Correct Answer Key: 
+Generated Output: <s><s> [INST] Given the question 'The person taught an advanced class only for who?' and the following choices: A: own house, B: own self, C: wonderful memories, D: know truth, E: intelligent children, which one is correct? Answer only with one of the following A, B, C, D or E. [/INST]{tokenizer.eos_token} None of the given choices directly answer the question "The person taught an advanced class only for..." Therefore, none of the choices A, B, C, D, or E is the correct answer. The question asks for whom the person taught the advanced class, but none of the choices provide that information.</s>
+
+Question ID: 1f74ea1f73b9f5d91a665b4d90218a6e
+Question: What is a likely consequence of ignorance of rules?
+Choices: A: find truth, B: hostility, C: bliss, D: accidents, E: damage
+Correct Answer Key: 
+Generated Output: <s><s> [INST] Given the question 'What is a likely consequence of ignorance of rules?' and the following choices: A: find truth, B: hostility, C: bliss, D: accidents, E: damage, which one is correct? Answer only with one of the following A, B, C, D or E. [/INST]{tokenizer.eos_token} D: accidents. Ignorance of rules can lead to accidents, as people may unintentionally violate safety protocols or regulations.</s>
+
