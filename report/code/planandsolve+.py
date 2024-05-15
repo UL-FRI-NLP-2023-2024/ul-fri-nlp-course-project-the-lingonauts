@@ -27,7 +27,7 @@ with open("output_ps+.txt", "w") as file:
             formatted_question = (
                 f"{tokenizer.bos_token}[INST] Given the question '{question}' and the following choices: "
                 + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-                + ", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first understand the problem and devise a plan to solve the problem. Then, let's carry out the plan to solve the problem step by step. [/INST]{tokenizer.eos_token}"
+                + ", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first understand the problem, extract relevant variables and their corresponding numerals, and devise a plan. Then, let's carry out the plan, calculate intermediate variables (pay attention to commonsense reasoning), solve the problem step by step, and show the answer. [/INST]{tokenizer.eos_token}"
             )
             print("Formated prompt")
             print("------------------------------------------------------------------------------------------------")
