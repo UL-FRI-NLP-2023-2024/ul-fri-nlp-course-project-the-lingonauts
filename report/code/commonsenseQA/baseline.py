@@ -11,10 +11,10 @@ tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
 dataset = load_dataset("tau/commonsense_qa", split="validation")
 print(f"Dataset loaded with {len(dataset)} entries.")
 
-with open("output_ps+.txt", "w") as file:
+with open("output_ps.txt", "w") as file:
     #count = 0
     for example in dataset:
-        #if count < 5:
+        #if count < 15:
             question = example['question']
             choices = example['choices']['text']
             choice_labels = example['choices']['label']
@@ -22,12 +22,12 @@ with open("output_ps+.txt", "w") as file:
             print("Answer Key:", example['answerKey'])
 
 
-            # Format the question with instruction tokens for PS+
+            # Format the question with instruction tokens for PS
             formatted_question = (
                 f"{tokenizer.bos_token}[INST] Given the question '{question}' and the following choices: "
                 + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-                + f", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first prepare relevant information and make a plan. Then, let's answer the question step by step (pay attention to commonsense and logical coherence). The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[/INST]{tokenizer.eos_token}")
-                
+                + f", which one is correct?  Answer only with one of the following A, B, C, D or E. The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information. [/INST]{tokenizer.eos_token}"
+            )
             print("Formated prompt")
             print("------------------------------------------------------------------------------------------------")
             print(formatted_question)
@@ -50,6 +50,6 @@ with open("output_ps+.txt", "w") as file:
             print("------------------------------------------------------------------------------------------------")
             print("------------------------------------------------------------------------------------------------")
             #count += 1
-        #else:
+       #else:
             #break
 print("Processed all examples.")
