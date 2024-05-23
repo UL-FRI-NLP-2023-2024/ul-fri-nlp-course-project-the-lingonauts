@@ -1,3 +1,5 @@
 torch
 transformers>=4.34.0
 datasets
+scikit-learn
+numpy

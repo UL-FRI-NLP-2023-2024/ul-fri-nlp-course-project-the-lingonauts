@@ -14,9 +14,9 @@ print(f"Dataset loaded with {len(dataset)} entries.")
 
 with open("zeroCoT_commmongen.txt", "w") as file:
 # Example of formatting prompts for a few examples
-    counter = 0
+    #counter = 0
     for example in dataset:  # Process just a few examples for demonstration
-        if counter < 3:
+        #if counter < 3:
             concepts = ", ".join(example['concepts'])
             prompt = f"Generate only one sentence using all of the following concepts: {concepts}. Let's think step by step."
 
@@ -35,6 +35,6 @@ with open("zeroCoT_commmongen.txt", "w") as file:
             file.write("Target: " + example['target'] + "\n")
             file.write("Generated Output: " + decoded + "\n")
 
-            counter += 1
-        else:
-            break
+        #    counter += 1
+        #else:
+        #    break

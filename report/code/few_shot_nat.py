@@ -76,31 +76,34 @@ def few_shot_formatted_question(concept_set_idx, concepts, dataset):
     return prompt
 
 
-
-with open("output_cs2.txt", "w") as file:
+with open("few_shot_commongen.txt", "w") as file:
     file.write("Test entry\n")  
-    count = 0  
+    #count = 0  
     for example in dataset:
-        if count < 3:
+        #if count < 3:
 
-            concept_set_idx = example['concept_set_idx']
-            concepts = example['concepts']
-            target = example['target']
+        concept_set_idx = example['concept_set_idx']
+        concepts = example['concepts']
+        target = example['target']
 
 
 
-            formatted_question = few_shot_formatted_question(concept_set_idx, concepts, dataset)
-            decoded = decoded_answer(formatted_question)
+        formatted_question = few_shot_formatted_question(concept_set_idx, concepts, dataset)
+        decoded = decoded_answer(formatted_question)
 
-            print("Formatted prompt")
-            print("------------------------------------------------------------------------------------------------")
-            print(formatted_question)
-            print("------------------------------------------------------------------------------------------------")
-            print("------------------------------------------------------------------------------------------------")
-            print("ANSWER")
-            print(decoded)
-            print("------------------------------------------------------------------------------------------------")
-            count += 1 
-        else:
-            break  
-    print("Processed first 5 examples.")
+        #print("Formatted prompt")
+        #print("------------------------------------------------------------------------------------------------")
+        #print(formatted_question)
+        #print("------------------------------------------------------------------------------------------------")
+        #print("------------------------------------------------------------------------------------------------")
+        #print("ANSWER")
+        #print(decoded)
+        #print("------------------------------------------------------------------------------------------------")
+        #count += 1 
+        file.write("Concepts set ID: " + str(example['concept_set_idx']) + "\n")
+        file.write("Concepts: " + str(example['concepts']) + "\n")
+        file.write("Target: " + example['target'] + "\n")
+        file.write("Generated Output: " + decoded + "\n")
+#        else:
+#            break  
+#    print("Processed first 5 examples.")
