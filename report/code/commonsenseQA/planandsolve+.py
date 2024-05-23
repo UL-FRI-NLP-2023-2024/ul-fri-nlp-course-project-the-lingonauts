@@ -13,9 +13,9 @@ print(f"Dataset loaded with {len(dataset)} entries.")
 
 with open("output_ps+.txt", "w") as file:
     file.write("Test entry" "\n")
-    count = 0
+    #count = 0
     for example in dataset:
-        if count < 5:
+        #if count < 5:
             question = example['question']
             choices = example['choices']['text']
             choice_labels = example['choices']['label']
@@ -27,7 +27,7 @@ with open("output_ps+.txt", "w") as file:
             formatted_question = (
                 f"{tokenizer.bos_token}[INST] Given the question '{question}' and the following choices: "
                 + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-                + ", which one is correct?  Answer only with one of the following A, B, C, D or E. ich one is correct? Let's first prepare relevant information and make a plan. Then, let's answer the question step by step (pay attention to commonsense and logical coherence)[/INST]{tokenizer.eos_token}"
+                + ", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first prepare relevant information and make a plan. Then, let's answer the question step by step (pay attention to commonsense and logical coherence)[/INST]{tokenizer.eos_token}")
                 
             print("Formated prompt")
             print("------------------------------------------------------------------------------------------------")
@@ -50,7 +50,7 @@ with open("output_ps+.txt", "w") as file:
             print(decoded)
             print("------------------------------------------------------------------------------------------------")
             print("------------------------------------------------------------------------------------------------")
-            count += 1
-        else:
-            break
-print("Processed first 5 examples.")
+            #count += 1
+        #else:
+            #break
+print("Processed all examples.")
