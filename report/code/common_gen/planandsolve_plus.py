@@ -18,7 +18,7 @@ with open("psplus_commmongen.txt", "w") as file:
     for example in dataset:  # Process just a few examples for demonstration
         #if counter < 3:
             concepts = ", ".join(example['concepts'])
-            prompt = f"Generate only one sentence using all of the following concepts: {concepts}. Let's first understand the concepts and devise a plan how to create a sentence (pay attention to commonsense and logical coherence). Then, let's carry out the plan to solve the problem step by step."
+            prompt = f"Generate only one sentence using all of the following concepts: {concepts}. Let's first understand the concepts and devise a plan how to create a sentence (pay attention to commonsense and logical coherence). Then, let's carry out the plan to solve the problem step by step. The final output should be formatted as: 'Final sentence: <your sentence here>' where <your sentence here> includes all the given concepts. Do not include any additional information."
             
 
             # This is the prompt you'd send to the model
