@@ -11,7 +11,7 @@ tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
 dataset = load_dataset("tau/commonsense_qa", split="validation")
 print(f"Dataset loaded with {len(dataset)} entries.")
 
-with open("output_ps.txt", "w") as file:
+with open("outputs/commonsenseqa_baseline.txt", "w") as file:
     #count = 0
     for example in dataset:
         #if count < 15:
