@@ -78,11 +78,26 @@ def few_shot_formatted_question(question, choices, choice_labels, val_set):
     )
     return prompt
 
+def 
 
+
+def extracted_letter(decoded_output):
+    # Define the regex pattern to extract the target sentence
+    pattern = r'\[Main target sentence\](.*?)(?:\[End of main target sentence\]|</s>)'
+    
+    # Search for the first occurrence of the target sentence
+    match = re.search(pattern, decoded_output)
+    
+    if match:
+        # Extract and return the target sentence
+        return match.group(1).strip()
+    else:
+        raise ValueError("\n\n\n\n\n" + "Target sentence not found in the decoded output: " + decoded_output + "\n\n\n\n\n")
 
 with open("output_cs2.txt", "w") as file:
     file.write("Test entry\n")  
     count = 0  
+    correct = 0
     for example in dataset:
         if count < 3:
             question = example['question']
@@ -92,16 +107,26 @@ with open("output_cs2.txt", "w") as file:
 
             formatted_question = few_shot_formatted_question(question, choices, choice_labels, dataset)
             decoded = decoded_answer(formatted_question)
+            extracted = extracted_letter(decoded)
 
-            print("Formatted prompt")
-            print("------------------------------------------------------------------------------------------------")
-            print(formatted_question)
-            print("------------------------------------------------------------------------------------------------")
-            print("------------------------------------------------------------------------------------------------")
-            print("ANSWER")
-            print(decoded)
-            print("------------------------------------------------------------------------------------------------")
+
+            file.write("\n\n\n")
+            file.write(": " + question + "\n")
+            file.write("Answer key: " + answer_key + "\n")
+            file.write("Extracted output: " + extracted_letter(decoded) + "\n")
+           
+            print("\n\n\n")
+            
+            print(": " + question + "\n")
+            print("Answer key: " + answer_key + "\n")
+            print("Extracted output: " + extracted_letter(decoded) + "\n")
+            
+            if extracted == answer_key:
+                correct += 1
             count += 1 
+            accuracy = correct/count
+            print("Accuracy: ", accuracy)
         else:
             break  
     print("Processed first 5 examples.")
+

@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import random
+from evaluation_metrics import *
 
 
 #1.IMPORTING MODELS, DATA================================================================================================
@@ -47,7 +48,7 @@ def find_similar_questions(concept_set_idx, dataset, n=3):
 def few_shot_example_formatted_question(concepts, target):
     return (
         f"[Example concepts] {', '.join(concepts)} [End of example concepts]" #{tokenizer.eos_token}
-        + f". \n[Target sentence]{target}[End of target sentence]" #{tokenizer.eos_token}
+        + f". \n[Example target sentence]{target}[End of example target sentence]" #{tokenizer.eos_token}
     )
 
 def normally_formatted_question(concepts):
@@ -68,7 +69,7 @@ def few_shot_formatted_question(concept_set_idx, concepts, dataset):
 
     prompt = (
         #f"{tokenizer.bos_token}" +
-        f"[Introduction] You will see examples of target sentences constructed using specific concepts. Please provide one natural language sentence using the given concepts. [End of introduction]"
+        f"[Introduction] You will see examples of target sentences constructed using specific concepts. Please provide one natural language sentence using the given main concepts and put target sentence between brackets that say [Main target sentence] at the beggining of sentence and [End of main target sentence] at the end of it.[End of introduction]"
         + f"{examples}"
         + f"\n\n{main_question}" #{tokenizer.eos_token}
         #+ "\nANSWER:"
@@ -76,34 +77,73 @@ def few_shot_formatted_question(concept_set_idx, concepts, dataset):
     return prompt
 
 
+import re
+
+def extracted_sentence(decoded_output):
+    # Define the regex pattern to extract the main target sentence or target sentence
+    pattern = r'\[(?:Main target sentence|Target sentence)\](.*?)(?:\[End of (?:main target sentence|Target sentence)\]|</s>)'
+    
+    # Search for the first occurrence of the target sentence
+    match = re.search(pattern, decoded_output)
+    
+    if match:
+        # Extract and return the target sentence
+        return match.group(1).strip()
+    else:
+        raise ValueError("\n\n\n\n\n" + "Target sentence not found in the decoded output: " + decoded_output + "\n\n\n\n\n")
+
 with open("few_shot_commongen.txt", "w") as file:
     file.write("Test entry\n")  
-    #count = 0  
+    count = 0  
+    bleu_scores = 0
+    rouge_scores = 0
+    meteor_scores = 0
+    bert_scores = 0
     for example in dataset:
-        #if count < 3:
+        if count < (len(dataset)+1):
+            count += 1
 
-        concept_set_idx = example['concept_set_idx']
-        concepts = example['concepts']
-        target = example['target']
+            concept_set_idx = example['concept_set_idx']
+            concepts = example['concepts']
+            target = example['target']
+    
+    
+    
+            formatted_question = few_shot_formatted_question(concept_set_idx, concepts, dataset)
+            decoded = decoded_answer(formatted_question)
+            extracted = extracted_sentence(decoded)
 
+            bleu_score = compute_bleu(extracted, target)
+            rouge_score = compute_rouge(extracted, target)
+            meteor_score = compute_meteor(extracted, target)
+            bert_score = compute_bertscore(extracted, target)
+            
+            bert_scores += bert_score
+            bleu_scores += bleu_score
+            rouge_scores += rouge_score
+            meteor_scores += meteor_score
 
+            file.write("\n\n\n")
+            file.write("Concepts set ID: " + str(example['concept_set_idx']) + "\n")
+            file.write("Concepts: " + str(example['concepts']) + "\n")
+            file.write("Target: " + example['target'] + "\n")
+            file.write("Generated Output (extracted): " + extracted + "\n")
+            file.write("")
+            print("\n\n\n")
+            print("Concepts set ID: " + str(example['concept_set_idx']) + "\n")
+            print("Concepts: " + str(example['concepts']) + "\n")
+            print("Target: " + example['target'] + "\n")
+            print("Generated Output (extracted): " + extracted_sentence(decoded) + "\n")
+            print("=====================================================================")
+            #print("Generated Output: " + decoded + "\n\n\n\n\n\n\n\n\n")
+            
+            
 
-        formatted_question = few_shot_formatted_question(concept_set_idx, concepts, dataset)
-        decoded = decoded_answer(formatted_question)
-
-        #print("Formatted prompt")
-        #print("------------------------------------------------------------------------------------------------")
-        #print(formatted_question)
-        #print("------------------------------------------------------------------------------------------------")
-        #print("------------------------------------------------------------------------------------------------")
-        #print("ANSWER")
-        #print(decoded)
-        #print("------------------------------------------------------------------------------------------------")
-        #count += 1 
-        file.write("Concepts set ID: " + str(example['concept_set_idx']) + "\n")
-        file.write("Concepts: " + str(example['concepts']) + "\n")
-        file.write("Target: " + example['target'] + "\n")
-        file.write("Generated Output: " + decoded + "\n")
-#        else:
-#            break  
-#    print("Processed first 5 examples.")
+        else:
+            break  
+    print(f"Processed first {count} examples.")
+    print(f"BLEU score: {bleu_scores/count}")
+    print(f"ROUGE score: {rouge_scores/count}")
+    print(f"Meteor score: {meteor_scores/count}")
+    print(f"BERT score: {bert_scores/count}")
+    print(f"Processed first {count} examples.")
