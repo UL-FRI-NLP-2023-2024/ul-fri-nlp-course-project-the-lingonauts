@@ -12,7 +12,7 @@ dataset = load_dataset("allenai/common_gen", split="validation")
 print(f"Dataset loaded with {len(dataset)} entries.")
 #print(dataset[0])
 
-with open("outputs/commmongen_baseline.txt", "w") as file:
+with open("outputs/baseline_commongen.txt", "w") as file:
 # Example of formatting prompts for a few examples
     #counter = 0
     for example in dataset:  # Process just a few examples for demonstration
