@@ -1,0 +1,40 @@
+1. In the kitchen, roll out the dough until it's thin enough to make pasta.</s>
+
+2. After digging a hole with a shovel, she carefully placed a young sapling into it and covered the roots with soil to start a new tree.</s>
+
+3. A climber wears a harness, securing it to the mountain wall before ascending.</s>
+
+4. The artist skillfully brought the lady's elegant features to life as he expertly painted her image on the canvas.</s>
+
+5. At the gym, we play a volleyball game with a ball to keep fit and have fun.</s>
+
+6. Someone gives the dog a bath in the bathtub.</s>
+
+7. A dog stands in the snow, looking around for its master.</s>
+
+8. The couple enjoy their date, riding on a road with their skateboards.</s>
+
+9. One person playfully used a stick as a microphone, leaning it against his face, and said something funny, making the other person laugh uncontrollably by tapping his foot rhythmically like a makeshift drum.</s>
+
+10. While trying to ride out of a tight parking space, I accidentally knocked over someone's bag. In retaliation, I was punched, but quickly hopped back on my scooter and sped away.</s>
+
+
+Common Sense Understanding: Does the text demonstrate an understanding of everyday situations and common sense knowledge?
+
+5 4 5 4 3 4 4 5 1 2 | AVG: 3.7
+
+Logical Consistency: Are the conclusions drawn logically consistent with the given information and common sense?
+
+5 5 5 5 5 4 5 5 2 3 | AVG: 4.4
+
+Realism: Does the text describe situations and events realistically and believably?
+
+5 5 5 4 5 5 5 5 2 2 | AVG: 4.3
+
+Inference Problem-solving: Does the text make reasonable inferences and effectively solve the problem presented?
+
+5 5 5 5 5 4 4 5 2 3 | AVG: 4.3
+
+Intuitiveness Novelty: Is the reasoning process intuitive and understandable, providing unique insights beyond the prompt?
+
+3 4 4 4 5 3 3 3 1 2 | AVG: 3.2

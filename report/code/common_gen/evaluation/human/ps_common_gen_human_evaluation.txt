@@ -1,0 +1,39 @@
+1. In the kitchen, prepare the dough and roll it out for baking.</s>
+
+2. A machine, as it effectively completes tasks and works at full capacity, inevitably undergoes wear and tear necessitating periodic maintenance and possible part replacement.</s>
+
+3. Workers are essential to keep the production line running smoothly, but their routine maintenance efforts become increasingly important as regular use wears down the machinery, with noticeable wear signs already apparent on the big metal press.</s>
+
+4. A man shaves his leg while watching the clock.</s>
+
+5. While exercising, listen to your favorite music to boost motivation and energy.</s>
+
+6. The violinist will stand on the stage and perform an enchanting melody on his violin.</s>
+
+7. A person stands before a tree, engrossed in conversation.</s>
+
+8. The apple peeling machine is an efficient tool for peeling apples.</s>
+
+9. After a warm shower, I carefully toweled my long, damp hair, let it air-dry for a few minutes, and then brushed through the tangles while the cool late summer breeze blew gently through the open window, helping to dry my hair even further.</s>
+
+10. The couple sits on the bench as the man ties a balloon to it, preparing for their joyful ascent.</s>
+
+Common Sense Understanding: Does the text demonstrate an understanding of everyday situations and common sense knowledge?
+
+5 5 4 3 5 5 2 5 5 2 | AVG: 4.1
+
+Logical Consistency: Are the conclusions drawn logically consistent with the given information and common sense?
+
+5 5 3 4 5 5 1 4 5 2 | AVG: 3.9
+
+Realism: Does the text describe situations and events realistically and believably?
+
+5 5 5 3 5 4 2 5 4 1 | AVG: 3.9
+
+Inference Problem-solving: Does the text make reasonable inferences and effectively solve the problem presented?
+
+4 5 5 4 5 4 2 5 4 2 | AVG: 4
+
+Intuitiveness Novelty: Is the reasoning process intuitive and understandable, providing unique insights beyond the prompt?
+
+3 4 5 1 4 4 3 2 5 4 | AVG: 3.5
