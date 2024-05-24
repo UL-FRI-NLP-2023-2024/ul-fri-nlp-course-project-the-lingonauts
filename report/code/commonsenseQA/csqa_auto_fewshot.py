@@ -4,6 +4,7 @@ import sys
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import re
 
 
 #1.IMPORTING MODELS, DATA================================================================================================
@@ -40,7 +41,7 @@ def find_similar_questions(question, val_set, n=3):
     similarities = cosine_similarity(question_vectors[-1], question_vectors[:-1]).flatten()
 
     top_indices = np.argsort(similarities)[(-n):]
-    return [val_set[int(i)] for i in top_indices]
+    return [val_set[int(i)] for i in top_indices] 
 
 
 def few_shot_example_formatted_question(question, choices, choice_labels, answer_key):
@@ -69,42 +70,77 @@ def few_shot_formatted_question(question, choices, choice_labels, val_set):
     main_question = normally_formatted_question(question, choices, choice_labels)
 
 
-    prompt = (f"{tokenizer.bos_token}" + f"[INST][Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[End of introduction]\n"
+    prompt = (
+        #f"{tokenizer.bos_token}" +
+        f"[Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. Your response can only include one character: A, B, C, D or E. Put your answer to the main question between brackets that say [Main answer] at the beggining of sentence and [End of main answer] at the end of it.[End of introduction]"
         + f"{examples}"
-        + f"\n{main_question}[/INST]\n{tokenizer.eos_token}\n"
+        + f"\n\n{main_question}" #{tokenizer.eos_token}
+        #+ "\nANSWER:"
     )
     return prompt
 
 
 
-with open("outputs/commonsenseqa_auto_fewshot.txt", "w") as file: 
-    #count = 0  
+
+def extracted_letter(decoded_output):
+    
+    
+    # Define the regex pattern to extract the main answer
+    main_pattern = r'\[Main answer\](.*?)(?:\[End of main answer\]|</s>)'
+    
+    # Search for the main answer
+    main_match = re.search(main_pattern, decoded_output)
+    
+    if main_match:
+        # Extract and return the main answer
+        return main_match.group(1).strip()
+    else:
+        # Define the regex pattern to extract all answers
+        answer_pattern = r'\[Answer\](.*?)(?:\[End of answer\])'
+        
+        # Find all matches for answers
+        all_answers = re.findall(answer_pattern, decoded_output)
+        
+        if all_answers:
+            # Extract and return the last answer
+            return all_answers[-1].strip()
+        else:
+            raise ValueError("\n\n\n\n\n" + "Target sentence not found in the decoded output: " + decoded_output + "\n\n\n\n\n")
+
+with open("output_cs2.txt", "w") as file:
+    file.write("Test entry\n")  
+    count = 0  
+    correct = 0
     for example in dataset:
-        #if count < 5:
-        question = example['question']
-        choices = example['choices']['text']
-        choice_labels = example['choices']['label']
-        answer_key = example['answerKey']
+        if count < 100:
+            question = example['question']
+            choices = example['choices']['text']
+            choice_labels = example['choices']['label']
+            answer_key = example['answerKey']
 
-        formatted_question = few_shot_formatted_question(question, choices, choice_labels, dataset)
-        decoded = decoded_answer(formatted_question)
+            formatted_question = few_shot_formatted_question(question, choices, choice_labels, dataset)
+            decoded = decoded_answer(formatted_question)
+            extracted = extracted_letter(decoded)
 
-        file.write("Question ID: " + example['id'] + "\n")
-        file.write("Question: " + question + "\n")
-        file.write("Choices: " + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices)) + "\n")
-        file.write("Correct Answer Key: " + answer_key + "\n")
-        file.write("Generated Output: " + decoded + "\n")
-        file.write("\n")
 
-        print("Formatted prompt")
-        print("------------------------------------------------------------------------------------------------")
-        print(formatted_question)
-        print("------------------------------------------------------------------------------------------------")
-        print("------------------------------------------------------------------------------------------------")
-        print("ANSWER")
-        print(decoded)
-        print("------------------------------------------------------------------------------------------------")
-            #count += 1 
-        #else:
-            #break  
-    print("Processed all examples.")
+            file.write("\n\n\n")
+            file.write(": " + question + "\n")
+            file.write("Answer key: " + answer_key + "\n")
+            file.write("Extracted output: " + extracted_letter(decoded) + "\n")
+           
+            print("\n\n\n")
+            
+            print("Question: " + question + "\n")
+            print("Answer key: " + answer_key + "\n")
+            print("Extracted output: " + extracted_letter(decoded) + "\n")
+            #
+            if answer_key in extracted:
+                correct += 1
+            count += 1 
+            accuracy = correct/count
+            print("Accuracy: ", accuracy)
+            print("Count: ", count)
+        else:
+            break  
+    print("Processed first 5 examples.")
+
