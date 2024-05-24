@@ -40,7 +40,7 @@ def find_similar_questions(question, val_set, n=3):
     similarities = cosine_similarity(question_vectors[-1], question_vectors[:-1]).flatten()
 
     top_indices = np.argsort(similarities)[(-n):]
-    return [val_set[int(i)] for i in top_indices] 
+    return [val_set[int(i)] for i in top_indices]
 
 
 def few_shot_example_formatted_question(question, choices, choice_labels, answer_key):
@@ -69,39 +69,42 @@ def few_shot_formatted_question(question, choices, choice_labels, val_set):
     main_question = normally_formatted_question(question, choices, choice_labels)
 
 
-    prompt = (
-        #f"{tokenizer.bos_token}" +
-        f"[Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. Your response can only include one character: A, B, C, D or E. [End of introduction]"
+    prompt = (f"{tokenizer.bos_token}" + f"[INST][Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[End of introduction]\n"
         + f"{examples}"
-        + f"\n\n{main_question}" #{tokenizer.eos_token}
-        #+ "\nANSWER:"
+        + f"\n{main_question}[/INST]\n{tokenizer.eos_token}"
     )
     return prompt
 
 
 
-with open("output_auto_fewshot.txt", "w") as file:
-    file.write("Test entry\n")  
-    count = 0  
+with open("outputs/commonsenseqa_auto_fewshot.txt", "w") as file: 
+    #count = 0  
     for example in dataset:
-        if count < 3:
-            question = example['question']
-            choices = example['choices']['text']
-            choice_labels = example['choices']['label']
-            answer_key = example['answerKey']
+        #if count < 5:
+        question = example['question']
+        choices = example['choices']['text']
+        choice_labels = example['choices']['label']
+        answer_key = example['answerKey']
 
-            formatted_question = few_shot_formatted_question(question, choices, choice_labels, dataset)
-            decoded = decoded_answer(formatted_question)
+        formatted_question = few_shot_formatted_question(question, choices, choice_labels, dataset)
+        decoded = decoded_answer(formatted_question)
 
-            print("Formatted prompt")
-            print("------------------------------------------------------------------------------------------------")
-            print(formatted_question)
-            print("------------------------------------------------------------------------------------------------")
-            print("------------------------------------------------------------------------------------------------")
-            print("ANSWER")
-            print(decoded)
-            print("------------------------------------------------------------------------------------------------")
-            count += 1 
-        else:
-            break  
-    print("Processed first 3 examples.")
+        file.write("Question ID: " + example['id'] + "\n")
+        file.write("Question: " + question + "\n")
+        file.write("Choices: " + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices)) + "\n")
+        file.write("Correct Answer Key: " + answer_key + "\n")
+        file.write("Generated Output: " + decoded + "\n")
+        file.write("\n")
+
+        print("Formatted prompt")
+        print("------------------------------------------------------------------------------------------------")
+        print(formatted_question)
+        print("------------------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------------------")
+        print("ANSWER")
+        print(decoded)
+        print("------------------------------------------------------------------------------------------------")
+            #count += 1 
+        #else:
+            #break  
+    print("Processed all examples.")
