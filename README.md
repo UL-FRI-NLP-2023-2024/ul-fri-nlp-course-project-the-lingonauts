@@ -26,9 +26,9 @@ Also contains directories for raw code output and answer evaluation.
 
 Clone the repository via SSH to the HPC home directory. (You can use VSCode or manually)
 
-1. Go the directory
+1. Go to the *code* directory
 ```shell
-cd ul-fri-nlp-course-project-the-lingonauts/
+cd ul-fri-nlp-course-project-the-lingonauts/report/code
 ```
 
 2. Create a virtual environment
@@ -41,7 +41,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 ```
 
-4. Change shell to a SLURM node (I think it defaults to 2 CPU cores, you can use -c # flag to allocate more)
+4. Change shell to a SLURM node
 ```shell
 
 salloc
@@ -64,7 +64,7 @@ srun python report/code/example.py
 ```
 
 ## Running batch jobs on HPC
-1. Make sure you did steps 1. to 6. in the **HPC first time setup**.  
+1. Make sure steps 1. to 6. in the **HPC first time setup** were completed.
 
 2. Go to report/code subdirectory
 ```shell
@@ -80,11 +80,6 @@ cat run_python.sh
 
 5. Make sure run_python.sh is executable
 ```shell
-[mb62860@hpc-login2 code]$ ls -la run_python.sh 
--rwxr-xr-x 1 mb62860 mb62860 760 May  1 11:53 run_python.sh
-```
-```shell
-# If you don't see the x bytes set, do
 chmod +x run_python.sh
 ```
 6. Run the script with the sbatch command. Provide the path to the python script right after run_python.sh
