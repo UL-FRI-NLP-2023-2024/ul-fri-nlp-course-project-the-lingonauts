@@ -71,7 +71,7 @@ def few_shot_formatted_question(question, choices, choice_labels, val_set):
 
     prompt = (f"{tokenizer.bos_token}" + f"[INST][Introduction] You will see examples and a main question. Please provide the answer to the main question based on these examples. The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[End of introduction]\n"
         + f"{examples}"
-        + f"\n{main_question}[/INST]\n{tokenizer.eos_token}"
+        + f"\n{main_question}[/INST]\n{tokenizer.eos_token}\n"
     )
     return prompt
 

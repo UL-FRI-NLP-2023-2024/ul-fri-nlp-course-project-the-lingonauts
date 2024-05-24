@@ -2,22 +2,24 @@ import csv
 import re
 
 # Input and output file paths
-input_file_path = 'outputs/output_ps.txt'
-output_file_path = 'parsed_ps.csv'
+input_file_path = 'outputs/commonsenseqa_ps_plus.txt'
+output_file_path = 'parsed_answers/parsed_csqa_ps_plus.csv'
 
 
 # Regular expressions to match relevant sections
 question_id_re = re.compile(r"Question ID:\s*(\w+)")
 correct_answer_key_re = re.compile(r"Correct Answer Key:\s*([A-E])")
-generated_output_re = re.compile(r"Generated Output\:.*?{tokenizer\.eos_token}(.*?)[^\"]</s>", re.DOTALL)
+generated_output_re = re.compile(r"Generated Output\:.*?\[\/INST\]\s*</s>\s*(.*?)</s>", re.DOTALL)
 answer_key_re = re.compile(r"answer.*? is:?\s*[\"\(\']*([A-E])")
-answer_would_be_re = re.compile(r"(?:answer (?:must|would) be \"?([A-E]))")
+answer_would_be_re = re.compile(r"(?:answer (?:must|would) be\:?\s\"?([A-E]))")
 answer_re = re.compile(r"[A,a]nswer:\s*\"?([A-E])")
 direct_answer_re = re.compile(r"\n\s?([A-E])[\:\.][\s\w]+")
 i_would_select_re = re.compile(r"I would select answer \"?([A-E])")
-option_re = re.compile(r"(?:\"?([A-E]).*? correct)")
+option_re = re.compile(r"\"?([A-E])[\s,\w]{,3}\scorrect")
 last_line_re = re.compile(r"([A-E])[\:\.]|(?:option|choice)\s([A-E])")
 none_of_the_above_re = re.compile(r"none of the above", re.IGNORECASE)
+
+correct_answer_letter_re = re.compile(r"cor.{,3}rect answer letter:\s*([A-E])", re.IGNORECASE)
 
 # Read input file content
 with open(input_file_path, 'r') as infile:
@@ -31,6 +33,10 @@ with open(output_file_path, 'w', newline='') as outfile:
     csv_writer = csv.writer(outfile)
     csv_writer.writerow(['Question ID', 'Correct Answer Key', 'Answer Key'])
     
+    # count correct answers
+    count = 0
+    correct_answers = 0
+
     # Process each question block
     for block in question_blocks:
         # Extract Question ID
@@ -52,44 +58,56 @@ with open(output_file_path, 'w', newline='') as outfile:
             final_line = generated_output.strip().splitlines()[-1]
             
             # Extract Answer Key from the final line
-            answer_key_match = answer_key_re.search(generated_output)
-            if answer_key_match:
-                answer_key = answer_key_match.group(1)
+            correct_answer_letter_match = correct_answer_letter_re.search(generated_output)
+            if correct_answer_letter_match:
+                answer_key = correct_answer_letter_match.group(1)
             else:
-                answer_match = answer_re.search(generated_output)
-                if answer_match:
-                    answer_key = answer_match.group(1)
+                answer_key_match = answer_key_re.search(generated_output)
+                if answer_key_match:
+                    answer_key = answer_key_match.group(1)
                 else:
-                    direct_answer_match = direct_answer_re.search(generated_output)
-                    if direct_answer_match:
-                        answer_key = direct_answer_match.group(1)
+                    answer_match = answer_re.search(generated_output)
+                    if answer_match:
+                        answer_key = answer_match.group(1)
                     else:
-                        answer_would_be_match = answer_would_be_re.search(generated_output)
-                        if answer_would_be_match:
-                            answer_key = answer_would_be_match.group(1)
+                        direct_answer_match = direct_answer_re.search(generated_output)
+                        if direct_answer_match:
+                            answer_key = direct_answer_match.group(1)
                         else:
-                            i_would_select_match = i_would_select_re.search(final_line)
-                            if i_would_select_match:
-                                answer_key = i_would_select_match.group(1)
+                            answer_would_be_match = answer_would_be_re.search(generated_output)
+                            if answer_would_be_match:
+                                answer_key = answer_would_be_match.group(1)
                             else:
-                                last_line_match = last_line_re.search(final_line)
-                                if last_line_match:
-                                    if last_line_match.group(1):
-                                        answer_key = last_line_match.group(1)
-                                    else:
-                                        answer_key = last_line_match.group(2)
+                                i_would_select_match = i_would_select_re.search(final_line)
+                                if i_would_select_match:
+                                    answer_key = i_would_select_match.group(1)
                                 else:
-                                    none_of_the_above_match = none_of_the_above_re.search(final_line)
-                                    if none_of_the_above_match:
-                                        answer_key = "none"
-                                    else:
-                                        option_match = option_re.search(final_line)
-                                        if option_match:
-                                            answer_key = option_match.group(1)
+                                    last_line_match = last_line_re.search(final_line)
+                                    if last_line_match:
+                                        if last_line_match.group(1):
+                                            answer_key = last_line_match.group(1)
                                         else:
-                                            answer_key = generated_output
+                                            answer_key = last_line_match.group(2)
+                                    else:
+                                        none_of_the_above_match = none_of_the_above_re.search(final_line)
+                                        if none_of_the_above_match:
+                                            answer_key = "none"
+                                        else:
+                                            option_match = option_re.search(final_line)
+                                            if option_match:
+                                                answer_key = option_match.group(1)
+                                            else:
+                                                answer_key = generated_output
         else:
             answer_key = "error"
-        
+
+        # check for correct answer
+        count = count + 1
+        if answer_key == correct_answer_key:
+            #print (answer_key,correct_answer_key)
+            correct_answers = correct_answers + 1 
+
         # Write the extracted information to the CSV file
         csv_writer.writerow([question_id, correct_answer_key, answer_key])
+
+print("Correct answer percentage: {:2.2%}".format(correct_answers/count))

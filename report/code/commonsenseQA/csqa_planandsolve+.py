@@ -26,7 +26,7 @@ with open("outputs/commonsenseqa_ps_plus.txt", "w") as file:
             formatted_question = (
                 f"{tokenizer.bos_token}[INST] Given the question '{question}' and the following choices: "
                 + ", ".join(f"{label}: {text}" for label, text in zip(choice_labels, choices))
-                + f", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first prepare relevant information and make a plan. Then, let's answer the question step by step (pay attention to commonsense and logical coherence). The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[/INST]{tokenizer.eos_token}")
+                + f", which one is correct?  Answer only with one of the following A, B, C, D or E. Let's first prepare relevant information and make a plan. Then, let's answer the question step by step (pay attention to commonsense and logical coherence). The final output should be formatted as: 'Correct answer letter: <letter>', where <letter> is A,B,C,D or E. Answer with one letter only in the required format. Do not include any additional information.[/INST]\n{tokenizer.eos_token}\n")
                 
             print("Formated prompt")
             print("------------------------------------------------------------------------------------------------")
