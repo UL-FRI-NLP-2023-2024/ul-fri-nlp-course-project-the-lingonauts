@@ -2,6 +2,26 @@
 
 Repository containing all three submissions for course Natural Language Processing.
 
+## Repository general overview
+
+# __report__ 
+
+Contains the final LaTeX/PDF report for the assignment.
+
+# __report/code__
+
+Contains two directories, containing code for both used datasets - CommonsenseQA and CommonGen.
+
+# __report/code/commonsenseQA__
+
+Contains code for each prompting strategy and parsing of code output.
+Also contains directories for raw code output and parsed answers.
+
+# __report/code/common_gen__
+
+Contains code for each of the prompting strategies. 
+Also contains directories for raw code output and answer evaluation.
+
 ## HPC first time setup
 
 Clone the repository via SSH to the HPC home directory. (You can use VSCode or manually)
